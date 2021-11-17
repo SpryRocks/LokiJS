@@ -2764,10 +2764,11 @@
             cFun(err);
           });
       } else if (this.persistenceAdapter.mode === "reference" && typeof this.persistenceAdapter.exportDatabase === "function") {
-        // TODO: dirty should be cleared here
         // filename may seem redundant but loadDatabase will need to expect this same filename
-        this.persistenceAdapter.exportDatabase(this.filename, this.copy({ removeNonSerializable: true }), function exportDatabaseCallback(err) {
-          self.autosaveClearFlags();
+        var copy = this.copy({ removeNonSerializable: true });
+        self.autosaveClearFlags();
+        this.persistenceAdapter.exportDatabase(this.filename, copy, function exportDatabaseCallback(err) {
+          // todo: restore dirty if error occurred
           cFun(err);
         });
       }
